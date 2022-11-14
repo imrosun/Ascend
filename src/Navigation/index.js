@@ -9,29 +9,13 @@ import ConfirmEmailScreen from '../screens/ConfirmEmailScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import NewPasswordScreen from '../screens/NewPasswordScreen';
 import HomeScreen from '../screens/HomeScreen';
-import Splash from '../../../assets/images/login1.jpg';
 
 const Stack = createNativeStackNavigator();
-
-function SplashScreen({navigation}){
-    setTimeout(() => {
-        navigation.replace('SignIn');
-    }, 3000);
-    return(
-        <View style={styles.root}>
-        <Image source={Splash}
-            style={[styles.logo, {height: height * 0.3}]}
-            resizeMode="contain"  
-        />
-        </View>
-    );
-}
 
 const Navigation = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='SplashSc' screenOptions={{headerShown: false}}>
-                <Stack.Screen name="SplashSc" component={SplashScreen} />
+            <Stack.Navigator screenOptions={{headerShown: false}}>
                 <Stack.Screen name="SignIn" component={SignInScreen} />
                 <Stack.Screen name="SignUp" component={SignUpScreen} />
                 <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen} />
@@ -42,16 +26,4 @@ const Navigation = () => {
         </NavigationContainer>
     )
 }
-
-const styles = StyleSheet.create({
-    root: {
-        alignItems: 'center',
-        padding: 20,
-      },
-    logo: {
-      width: '70%',
-      maxWidth: 300,
-      maxHeight: 200,
-    },
-});
 export default Navigation;
