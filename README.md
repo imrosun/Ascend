@@ -18,3 +18,6 @@ To update packages
 - npm update
 - npm install npm@latest -g
 - npm update -g
+
+To install react native icons
+- npm install --save react-native-vector-icons
