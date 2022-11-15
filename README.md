@@ -1,6 +1,12 @@
 # AuthenticationReference
 Authentication app using react native cli
 
+Getting started with React Native
+- npm install -g react-native-cli
+
+Run the following commands to create a new React Native project
+- npx react-native init AuthenticationReference
+
 ## To run properly on your system install these depencies.
 To install React Native CLI Navigation
 - npm install @react-navigation/native
