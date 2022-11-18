@@ -16,6 +16,7 @@ import TextTab from './TextTab';
 import CalculateTab from './Calculate';
 
 import auth from "@react-native-firebase/auth";
+import PushNotification from "react-native-push-notification";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,6 +31,18 @@ const HomeScreen = ({ navigation }) => {
 
     return subscriber;
   }, []);
+
+  useEffect(() => {
+    createChannels();
+  }, []);
+
+  const createChannels = () => {
+    PushNotification.createChannel(
+      {
+        channelId: "test-channel",
+        channelName: "Test Channel"
+      })
+  }
 
   const logout = () => {
     Alert.alert(
@@ -74,6 +87,7 @@ const HomeScreen = ({ navigation }) => {
           <Text
             style={{
               fontSize: 20,
+              color: "green",
               textAlign: "center",
               marginBottom: 16,
             }}
@@ -81,11 +95,9 @@ const HomeScreen = ({ navigation }) => {
             Firebase Auth
           </Text>
           {user ? (
-            <Text>
+            <Text style={{color: "black"}}>
               Welcome{" "}
-              {user.displayName
-                ? user.displayName
-                : user.email}
+              {user.displayName ? user.displayName : user.email}
             </Text>
           ) : null}
           <TouchableOpacity
@@ -119,6 +131,7 @@ const HomeScreen = ({ navigation }) => {
           })}
            
         >
+        {/* <Tab.Screen name="Home" component={HomeScreen} /> */}
         <Tab.Screen name="Notification" component={NotificationTab} />
         <Tab.Screen name="Upload" component={UploadTab} />
         <Tab.Screen name="Text" component={TextTab} />
