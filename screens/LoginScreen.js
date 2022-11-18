@@ -1,5 +1,6 @@
 // Import React and Component
 import React, { useState, createRef } from "react";
+// import {firebase} from '../config';
 import {
   SafeAreaView,
   StyleSheet,
@@ -53,6 +54,23 @@ const LoginScreen = ({ navigation }) => {
       });
   };
 
+  //forgot pasword internally
+  const forgetPassword = () => {
+    setErrortext("");
+    if (!userEmail) {
+      alert("Please fill Email");
+      return;
+    }
+    auth()
+      .sendPasswordResetEmail(userEmail)
+      .then(() => {
+        alert('Password reset email sent! Please check your spam folder!')
+    })
+    .catch(error => {
+      alert(error)
+    })
+  };
+
   return (
     <SafeAreaView style={styles.mainBody}>
       <ScrollView
@@ -67,7 +85,7 @@ const LoginScreen = ({ navigation }) => {
           <KeyboardAvoidingView enabled>
             <View style={{ alignItems: "center" }}>
               <Image
-                source={require("../Image/aboutreact.png")}
+                source={require("../images/saraswati.jpg")}
                 style={{
                   width: "50%",
                   height: 100,
@@ -79,8 +97,8 @@ const LoginScreen = ({ navigation }) => {
             <View style={styles.sectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={(UserEmail) =>
-                  setUserEmail(UserEmail)
+                onChangeText={(userEmail) =>
+                  setUserEmail(userEmail)
                 }
                 placeholder="Enter Email"
                 placeholderTextColor="#8b9cb5"
@@ -127,6 +145,18 @@ const LoginScreen = ({ navigation }) => {
                 LOGIN
               </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.registerTextStyle}
+              onPress={()=>{forgetPassword()}}
+              
+            >
+              <Text style={{fontSize:16, fontWeight:'bold'}}>
+                Forget Password?
+              </Text>
+              
+            </TouchableOpacity>
+
             <Text
               style={styles.registerTextStyle}
               onPress={() =>
@@ -138,7 +168,7 @@ const LoginScreen = ({ navigation }) => {
           </KeyboardAvoidingView>
         </View>
       </ScrollView>
-      <Text
+      {/* <Text
         style={{
           fontSize: 18,
           textAlign: "center",
@@ -155,7 +185,7 @@ const LoginScreen = ({ navigation }) => {
         }}
       >
         www.aboutreact.com
-      </Text>
+      </Text> */}
     </SafeAreaView>
   );
 };

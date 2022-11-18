@@ -1,4 +1,12 @@
-apply plugin: "com.android.application"
+// apply plugin: "com.android.application"
+
+plugins {
+  id 'com.android.application'
+
+  // Add the Google services Gradle plugin
+  id 'com.google.gms.google-services'
+
+}
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -250,7 +258,9 @@ android {
 
 dependencies {
 
-    implementation 'com.google.firebase:firebase-analytics:17.0.1'
+    implementation platform('com.google.firebase:firebase-bom:31.0.3')
+
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 

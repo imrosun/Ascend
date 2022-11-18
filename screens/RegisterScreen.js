@@ -79,7 +79,7 @@ const RegisterScreen = ({ navigation }) => {
       >
         <View style={{ alignItems: "center" }}>
           <Image
-            source={require("../Image/aboutreact.png")}
+            source={require("../images/saraswati.jpg")}
             style={{
               width: "50%",
               height: 100,
@@ -159,7 +159,7 @@ const RegisterScreen = ({ navigation }) => {
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </ScrollView>
-      <Text
+      {/* <Text
         style={{
           fontSize: 18,
           textAlign: "center",
@@ -176,7 +176,7 @@ const RegisterScreen = ({ navigation }) => {
         }}
       >
         www.aboutreact.com
-      </Text>
+      </Text> */}
     </SafeAreaView>
   );
 };

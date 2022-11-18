@@ -1,5 +1,6 @@
 // Import React and Component
 import React, { useEffect, useState } from "react";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   View,
   Text,
@@ -8,8 +9,15 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import NotificationTab from './Notification';
+import UploadTab from './Upload';
+import TextTab from './TextTab';
+import CalculateTab from './Calculate';
 
 import auth from "@react-native-firebase/auth";
+
+const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({ navigation }) => {
   const [user, setUser] = useState();
@@ -90,25 +98,32 @@ const HomeScreen = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          React Native Firebase Authentication
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          www.aboutreact.com
-        </Text>
       </View>
+      <Tab.Navigator screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+  
+              if (route.name === 'HomeScreen') {
+                iconName = focused
+                  ? 'ios-information-circle'
+                  : 'ios-information-circle-outline';
+              } else if (route.name === 'Settings') {
+                iconName = focused ? 'ios-list' : 'ios-list-outline';
+              }
+  
+              // You can return any component that you like here!
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+          })}
+           
+        >
+        <Tab.Screen name="Notification" component={NotificationTab} />
+        <Tab.Screen name="Upload" component={UploadTab} />
+        <Tab.Screen name="Text" component={TextTab} />
+        <Tab.Screen name="Calculate" component={CalculateTab} />
+      </Tab.Navigator>
     </SafeAreaView>
   );
 };

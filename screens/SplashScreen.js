@@ -24,7 +24,7 @@ const SplashScreen = ({ navigation }) => {
       navigation.replace(
         auth().currentUser ? "HomeScreen" : "Auth"
       );
-    }, 5000);
+    }, 3000);
   }, []);
 
   return (
@@ -33,7 +33,7 @@ const SplashScreen = ({ navigation }) => {
     >
       <View style={styles.container}>
         <Image
-          source={require("../Image/aboutreact.png")}
+          source={require("../images/saraswati.jpg")}
           style={{
             width: "90%",
             resizeMode: "contain",
@@ -47,7 +47,7 @@ const SplashScreen = ({ navigation }) => {
           style={styles.activityIndicator}
         />
       </View>
-      <Text
+      {/* <Text
         style={{
           fontSize: 18,
           textAlign: "center",
@@ -64,7 +64,7 @@ const SplashScreen = ({ navigation }) => {
         }}
       >
         www.aboutreact.com
-      </Text>
+      </Text> */}
     </SafeAreaView>
   );
 };
