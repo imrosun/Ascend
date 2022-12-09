@@ -33,9 +33,9 @@ const SplashScreen = ({ navigation }) => {
     >
       <View style={styles.container}>
         <Image
-          source={require("../images/saraswati.jpg")}
+          source={require("../images/kindpng.png")}
           style={{
-            width: "90%",
+            width: "50%",
             resizeMode: "contain",
             margin: 30,
           }}
@@ -47,24 +47,7 @@ const SplashScreen = ({ navigation }) => {
           style={styles.activityIndicator}
         />
       </View>
-      {/* <Text
-        style={{
-          fontSize: 18,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        React Native Firebase Authentication
-      </Text>
-      <Text
-        style={{
-          fontSize: 16,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        www.aboutreact.com
-      </Text> */}
+
     </SafeAreaView>
   );
 };

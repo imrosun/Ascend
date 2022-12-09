@@ -1,5 +1,5 @@
 // Import React and Component
-import React, { useState, createRef } from "react";
+import React, { useEffect, useState, createRef } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,26 +14,65 @@ import {
 } from "react-native";
 
 import auth from "@react-native-firebase/auth";
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
+import uuid from 'react-native-uuid';
 
 const RegisterScreen = ({ navigation }) => {
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
+
+  useEffect(() => {
+    getFcmToken();
+  }, []);
+  const getFcmToken = async () => {
+    token = await messaging().getToken();
+    console.log(token);
+  };
+  
+  state = {
+    isValid: null,
+  };
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setUserName] = useState("");
   const [errortext, setErrortext] = useState("");
 
   const emailInputRef = createRef();
-  const passwordInputRef = createRef();
 
-  const handleSubmitButton = () => {
+  const saveData = () => {
+    let id = uuid.v4();
     setErrortext("");
-    if (!userName) return alert("Please fill Name");
-    if (!userEmail) return alert("Please fill Email");
-    if (!userPassword) return alert("Please fill Address");
+    if (!name) return alert("Please fill Name");
+    if (!email) return alert("Please fill Email");
+    var strongRegx = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
-    auth()
+    if (password.length < 8 ) {
+        return alert("Password should be atleast of 8 characters");
+    }
+    if(!strongRegx.test(password)) {
+          alert("Password should contain atleast one number, one special character and one uppercase");
+          return false;
+      }
+    if (!password) return alert("Please fill Address");
+    firestore()
+      .collection('Users')
+      .doc(id)
+      .set({
+        email: email,
+        password: password,
+        name: name, 
+        userId: id,       
+      })
+      .then(() => {
+        console.log('User added!');
+        navigation.goBack();
+        saveLocalData();
+      });
+      auth()
       .createUserWithEmailAndPassword(
-        userEmail,
-        userPassword
+        email,
+        password
       )
       .then((user) => {
         console.log(
@@ -43,9 +82,8 @@ const RegisterScreen = ({ navigation }) => {
         if (user) {
           auth()
             .currentUser.updateProfile({
-              displayName: userName,
-              photoURL:
-                "https://aboutreact.com/profile.png",
+              displayName: name,
+              
             })
             .then(() => navigation.replace("HomeScreen"))
             .catch((error) => {
@@ -65,6 +103,11 @@ const RegisterScreen = ({ navigation }) => {
         }
       });
   };
+  
+  const saveLocalData = async () => {
+    await AsyncStorage.setItem('NAME', name);
+    await AsyncStorage.setItem('EMAIL', email);
+  };
 
   return (
     <SafeAreaView
@@ -79,22 +122,24 @@ const RegisterScreen = ({ navigation }) => {
       >
         <View style={{ alignItems: "center" }}>
           <Image
-            source={require("../images/saraswati.jpg")}
+            source={require("../images/register.png")}
             style={{
               width: "50%",
               height: 100,
               resizeMode: "contain",
+              marginTop: 40,
               margin: 30,
             }}
           />
         </View>
         <KeyboardAvoidingView enabled>
-          <View style={styles.sectionStyle}>
+        <View style={styles.sectionStyle}>
             <TextInput
               style={styles.inputStyle}
-              onChangeText={(UserName) =>
-                setUserName(UserName)
-              }
+              value={name}
+            onChangeText={txt => {
+              setUserName(txt);
+            }}
               underlineColorAndroid="#f000"
               placeholder="Enter Name"
               placeholderTextColor="#8b9cb5"
@@ -107,51 +152,58 @@ const RegisterScreen = ({ navigation }) => {
               blurOnSubmit={false}
             />
           </View>
-          <View style={styles.sectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserEmail) =>
-                setUserEmail(UserEmail)
-              }
-              underlineColorAndroid="#f000"
-              placeholder="Enter Email"
-              placeholderTextColor="#8b9cb5"
-              keyboardType="email-address"
-              ref={emailInputRef}
-              returnKeyType="next"
-              onSubmitEditing={() =>
-                passwordInputRef.current &&
-                passwordInputRef.current.focus()
-              }
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={styles.sectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserPassword) =>
-                setUserPassword(UserPassword)
-              }
-              underlineColorAndroid="#f000"
-              placeholder="Enter Password"
-              placeholderTextColor="#8b9cb5"
-              ref={passwordInputRef}
-              returnKeyType="next"
-              secureTextEntry={true}
-              onSubmitEditing={Keyboard.dismiss}
-              blurOnSubmit={false}
-            />
-          </View>
+
+        <View style={styles.sectionStyle}>
+                <TextInput
+                    style={styles.inputStyle}
+                    value={email}
+                    onChangeText={txt => {
+                      setEmail(txt);
+                    }}
+                    underlineColorAndroid="#f000"
+                    placeholder="Email"
+                    placeholderTextColor="#8b9cb5"
+                    autoCapitalize="sentences"
+                    returnKeyType="next"
+                    onSubmitEditing={() =>
+                      emailInputRef.current &&
+                      emailInputRef.current.focus()
+                    }
+                    blurOnSubmit={false}
+                />
+            </View>
+            <View style={styles.sectionStyle}>
+                <TextInput
+                    style={styles.inputStyle}
+                    value={password}
+                    onChangeText={txt => {
+                      setPassword(txt);
+                    }}
+                    underlineColorAndroid="#f000"
+                    placeholder="Password"
+                    placeholderTextColor="#8b9cb5"
+                    autoCapitalize="sentences"
+                    returnKeyType="next"
+                    onSubmitEditing={() =>
+                      emailInputRef.current &&
+                      emailInputRef.current.focus()
+                    }
+                    blurOnSubmit={false}
+                    secureTextEntry={true}
+                    
+                />
+            </View>
+
           {errortext != "" ? (
             <Text style={styles.errorTextStyle}>
               {" "}
               {errortext}{" "}
             </Text>
-          ) : null}
+          ) : null} 
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity={0.5}
-            onPress={handleSubmitButton}
+            onPress={saveData}
           >
             <Text style={styles.buttonTextStyle}>
               REGISTER
@@ -159,26 +211,9 @@ const RegisterScreen = ({ navigation }) => {
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </ScrollView>
-      {/* <Text
-        style={{
-          fontSize: 18,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        React Native Firebase Authentication
-      </Text>
-      <Text
-        style={{
-          fontSize: 16,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        www.aboutreact.com
-      </Text> */}
     </SafeAreaView>
   );
+          
 };
 export default RegisterScreen;
 
@@ -192,7 +227,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonStyle: {
-    backgroundColor: "#7DE24E",
+    backgroundColor: "#46D49A",
     borderWidth: 0,
     color: "#FFFFFF",
     borderColor: "#7DE24E",
@@ -222,5 +257,21 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     fontSize: 14,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ecf0f1',
+    padding: 8,
+  },
+  input: {
+    height: 48,
+    width: '80%',
+    padding: 8,
+    margin: 16,
+    borderColor: 'gray',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 8,
   },
 });

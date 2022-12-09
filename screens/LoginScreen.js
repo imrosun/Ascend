@@ -65,10 +65,10 @@ const LoginScreen = ({ navigation }) => {
       .sendPasswordResetEmail(userEmail)
       .then(() => {
         alert('Password reset email sent! Please check your spam folder!')
-    })
-    .catch(error => {
-      alert(error)
-    })
+      })
+      .catch(error => {
+        alert(error)
+      })
   };
 
   return (
@@ -85,12 +85,12 @@ const LoginScreen = ({ navigation }) => {
           <KeyboardAvoidingView enabled>
             <View style={{ alignItems: "center" }}>
               <Image
-                source={require("../images/saraswati.jpg")}
+                source={require("../images/login1.png")}
                 style={{
-                  width: "50%",
+                  width: "70%",
                   height: 100,
                   resizeMode: "contain",
-                  margin: 30,
+                  margin: 10,
                 }}
               />
             </View>
@@ -148,13 +148,13 @@ const LoginScreen = ({ navigation }) => {
 
             <TouchableOpacity
               style={styles.registerTextStyle}
-              onPress={()=>{forgetPassword()}}
-              
+              onPress={() => { forgetPassword() }}
+
             >
-              <Text style={{fontSize:16, fontWeight:'bold'}}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
                 Forget Password?
               </Text>
-              
+
             </TouchableOpacity>
 
             <Text
@@ -168,24 +168,6 @@ const LoginScreen = ({ navigation }) => {
           </KeyboardAvoidingView>
         </View>
       </ScrollView>
-      {/* <Text
-        style={{
-          fontSize: 18,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        React Native Firebase Authentication
-      </Text>
-      <Text
-        style={{
-          fontSize: 16,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        www.aboutreact.com
-      </Text> */}
     </SafeAreaView>
   );
 };
